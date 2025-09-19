@@ -5,10 +5,13 @@ description = "Add your description here"
 requires-python = ">=3.11"
 dependencies = [
     "fastapi>=0.116.2",
+    "flask>=3.1.2",
     "flask-dance>=7.1.0",
     "flask-login>=0.6.3",
+    "flask-sqlalchemy>=3.1.1",
     "oauthlib>=3.3.1",
     "openai>=1.108.0",
+    "psycopg2-binary>=2.9.10",
     "pydantic>=2.11.9",
     "pyjwt>=2.10.1",
     "uvicorn[standard]>=0.35.0",

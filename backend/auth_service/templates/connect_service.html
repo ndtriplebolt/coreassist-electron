@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connect {{ connector_name|title }} - CoreAssist</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; margin: 0; padding: 0; background: #f5f5f5; }
+        .container { max-width: 600px; margin: 100px auto; padding: 40px 20px; text-align: center; }
+        .connect-card { background: white; padding: 60px 40px; border-radius: 12px; box-shadow: 0 2px 20px rgba(0,0,0,0.1); }
+        .btn { display: inline-block; padding: 12px 24px; background: #007bff; color: white; text-decoration: none; border-radius: 8px; margin: 10px; }
+        .btn:hover { background: #0056b3; }
+        .btn-secondary { background: #6c757d; }
+        .btn-secondary:hover { background: #545b62; }
+        h1 { color: #333; margin-bottom: 20px; }
+        p { color: #666; font-size: 16px; line-height: 1.6; }
+        .todo-notice { background: #fff3cd; border: 1px solid #ffeaa7; border-radius: 8px; padding: 20px; margin: 20px 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="connect-card">
+            <h1>Connect {{ connector_name|title|replace('_', ' ') }}</h1>
+            <p>Hello {{ user.first_name }}! You're about to connect your {{ connector_name|title|replace('_', ' ') }} account to CoreAssist.</p>
+            
+            <div class="todo-notice">
+                <h3>🚧 OAuth Integration Coming Soon</h3>
+                <p>OAuth2 flows for {{ connector_name }} are currently being implemented. When ready, you'll be able to securely connect your account and use tools like:</p>
+                
+                {% if connector_name == 'google_tasks' %}
+                    <ul style="text-align: left; display: inline-block;">
+                        <li>Create and manage task lists</li>
+                        <li>Add and complete tasks</li>
+                        <li>Set due dates and notes</li>
+                    </ul>
+                {% elif connector_name == 'google_calendar' %}
+                    <ul style="text-align: left; display: inline-block;">
+                        <li>Create calendar events</li>
+                        <li>List upcoming events</li>
+                        <li>Manage attendees and invites</li>
+                    </ul>
+                {% elif connector_name == 'slack' %}
+                    <ul style="text-align: left; display: inline-block;">
+                        <li>Send messages to channels</li>
+                        <li>List workspace channels</li>
+                        <li>Set your status</li>
+                    </ul>
+                {% endif %}
+            </div>
+            
+            <a href="/dashboard" class="btn btn-secondary">Back to Dashboard</a>
+        </div>
+    </div>
+</body>
+</html>
