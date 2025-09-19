@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoreAssist Voice Agent</title>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:;">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="logo">
+                <h1>CoreAssist</h1>
+                <span class="version" id="version">v1.0.0</span>
+            </div>
+            <div class="user-info" id="userInfo">
+                <span class="status" id="connectionStatus">Disconnected</span>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="app-main">
+            <!-- Authentication Section -->
+            <section class="auth-section" id="authSection">
+                <div class="auth-card">
+                    <h2>Welcome to CoreAssist</h2>
+                    <p>Connect to your personal voice agent backend to get started.</p>
+                    
+                    <div class="backend-config">
+                        <div class="config-item">
+                            <label>Auth Service:</label>
+                            <span id="authServiceUrl">Loading...</span>
+                        </div>
+                        <div class="config-item">
+                            <label>API Service:</label>
+                            <span id="apiServiceUrl">Loading...</span>
+                        </div>
+                    </div>
+
+                    <div class="auth-actions">
+                        <button id="connectBtn" class="btn btn-primary">
+                            <span class="btn-icon">🔗</span>
+                            Connect to CoreAssist
+                        </button>
+                        <button id="settingsBtn" class="btn btn-secondary">
+                            <span class="btn-icon">⚙️</span>
+                            Settings
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Dashboard Section (Hidden initially) -->
+            <section class="dashboard-section" id="dashboardSection" style="display: none;">
+                <div class="dashboard-grid">
+                    <!-- Voice Controls -->
+                    <div class="dashboard-card">
+                        <h3>Voice Commands</h3>
+                        <div class="voice-controls">
+                            <button id="voiceBtn" class="btn btn-voice">
+                                <span class="btn-icon">🎤</span>
+                                Start Listening
+                            </button>
+                            <div class="voice-status" id="voiceStatus">
+                                Ready to listen
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Connected Services -->
+                    <div class="dashboard-card">
+                        <h3>Connected Services</h3>
+                        <div class="services-list" id="servicesList">
+                            <div class="service-item">
+                                <span class="service-name">Google Tasks</span>
+                                <span class="service-status disconnected">Disconnected</span>
+                            </div>
+                            <div class="service-item">
+                                <span class="service-name">Google Calendar</span>
+                                <span class="service-status disconnected">Disconnected</span>
+                            </div>
+                            <div class="service-item">
+                                <span class="service-name">Slack</span>
+                                <span class="service-status disconnected">Disconnected</span>
+                            </div>
+                        </div>
+                        <button id="manageServicesBtn" class="btn btn-outline">
+                            Manage Services
+                        </button>
+                    </div>
+
+                    <!-- Recent Activity -->
+                    <div class="dashboard-card">
+                        <h3>Recent Activity</h3>
+                        <div class="activity-list" id="activityList">
+                            <div class="activity-item">
+                                <span class="activity-text">Welcome to CoreAssist!</span>
+                                <span class="activity-time">Just now</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <div class="footer-info">
+                <span>CoreAssist Voice Agent</span>
+                <span>•</span>
+                <span>Secure multi-user voice automation</span>
+            </div>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
