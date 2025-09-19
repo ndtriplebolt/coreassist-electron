@@ -18,6 +18,7 @@ import uvicorn
 
 from registry import registry
 from auth.store import auth_store
+from auth_utils import get_current_user, get_current_user_optional, verify_auth_flexible
 
 
 app = FastAPI(
@@ -129,26 +130,41 @@ async def get_tools_manifest():
         )
 
 
-@app.post("/tools/call", response_model=ToolCallResponse, dependencies=[Depends(verify_auth)])
-async def call_tool(request: ToolCallRequest):
+@app.post("/tools/call", response_model=ToolCallResponse)
+async def call_tool(request: ToolCallRequest, auth_context: dict = Depends(verify_auth_flexible)):
     """
     Execute a tool call through the unified router.
     
     Supports both namespaced (e.g., 'slack.send_message') and generic tool names.
     For generic names, the router selects the best matching connector.
     
-    Requires X-Auth header with SHARED_SECRET.
+    Authentication: Accepts either X-Auth header with SHARED_SECRET OR Authorization header with Bearer token.
     """
     try:
-        # Get user auth data if user_id is provided
+        # Get user auth data based on authentication type
         auth_data = None
-        if request.user_id:
-            user_data = auth_store.get_user(request.user_id)
-            if user_data:
-                # Get connector name from tool name
-                connector_name = request.tool_name.split('.')[0] if '.' in request.tool_name else None
-                if connector_name:
-                    auth_data = auth_store.get_connector_credentials(request.user_id, connector_name)
+        user_id = None
+        
+        if auth_context["type"] == "user":
+            # User authenticated with token
+            user = auth_context["user"]
+            user_id = user["id"]
+            
+            # Get connector name from tool name
+            connector_name = request.tool_name.split('.')[0] if '.' in request.tool_name else None
+            if connector_name:
+                # TODO: Get user's stored credentials for this connector
+                auth_data = None  # Will be implemented when OAuth flows are ready
+        
+        elif auth_context["type"] == "shared_secret":
+            # Backward compatibility with shared secret
+            # Use provided user_id if available for legacy support
+            if request.user_id:
+                user_data = auth_store.get_user(request.user_id)
+                if user_data:
+                    connector_name = request.tool_name.split('.')[0] if '.' in request.tool_name else None
+                    if connector_name:
+                        auth_data = auth_store.get_connector_credentials(request.user_id, connector_name)
         
         # Execute the tool
         result = await registry.execute_tool(
@@ -196,12 +212,12 @@ async def list_connectors():
     }
 
 
-@app.post("/connectors/{connector_name}/reload", dependencies=[Depends(verify_auth)])
-async def reload_connector(connector_name: str):
+@app.post("/connectors/{connector_name}/reload")
+async def reload_connector(connector_name: str, auth_context: dict = Depends(verify_auth_flexible)):
     """
     Reload a specific connector (useful for development).
     
-    Requires X-Auth header with SHARED_SECRET.
+    Authentication: Accepts either X-Auth header with SHARED_SECRET OR Authorization header with Bearer token.
     """
     try:
         registry.reload_connector(connector_name)
