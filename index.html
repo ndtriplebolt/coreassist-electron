@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoreAssist - Intelligent Voice Agent for Teams</title>
+    <meta name="description" content="Connect your own accounts to Google, Slack, and more with CoreAssist's secure multi-user voice agent. Download for Windows, Mac, and Linux.">
+    
+    <!-- Preload critical fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-blue: #0070f3;
+            --secondary-blue: #1976d2;
+            --accent-teal: #00d4aa;
+            --gradient-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --text-primary: #1a1a1a;
+            --text-secondary: #666666;
+            --text-muted: #888888;
+            --surface-white: #ffffff;
+            --surface-light: #f8fafc;
+            --border-light: #e2e8f0;
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: var(--surface-white);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-light);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-blue);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-blue);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 8rem 0 4rem;
+            background: var(--gradient-bg);
+            color: white;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.875rem 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: var(--surface-white);
+            color: var(--primary-blue);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: white;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 6rem 0;
+            background: var(--surface-light);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .feature-card {
+            background: var(--surface-white);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-light);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-bg);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        .feature-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .feature-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Download Section */
+        .download {
+            padding: 6rem 0;
+            background: var(--surface-white);
+        }
+
+        .download-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .download-card {
+            background: var(--surface-light);
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            border: 2px solid var(--border-light);
+            transition: all 0.3s ease;
+        }
+
+        .download-card:hover {
+            border-color: var(--primary-blue);
+            transform: translateY(-2px);
+        }
+
+        .platform-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .platform-name {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .platform-details {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        .btn-download {
+            background: var(--primary-blue);
+            color: white;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .btn-download:hover {
+            background: var(--secondary-blue);
+            transform: translateY(-2px);
+        }
+
+        /* Trust Section */
+        .trust {
+            padding: 4rem 0;
+            background: var(--surface-light);
+            text-align: center;
+        }
+
+        .trust-badges {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .trust-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .trust-icon {
+            color: var(--accent-teal);
+            font-size: 1.2rem;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--text-primary);
+            color: white;
+            padding: 3rem 0 2rem;
+            text-align: center;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 1rem;
+            color: var(--accent-teal);
+        }
+
+        .footer-section a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #333;
+            padding-top: 2rem;
+            color: #999;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: var(--surface-white);
+                flex-direction: column;
+                padding: 1rem;
+                box-shadow: var(--shadow-lg);
+                border-top: 1px solid var(--border-light);
+            }
+
+            .nav-links.open {
+                display: flex;
+            }
+
+            .hero {
+                padding: 6rem 0 3rem;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .download-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .trust-badges {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <a href="#" class="logo">CoreAssist</a>
+            <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">☰</button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#download">Download</a></li>
+                <li><a href="#security">Security</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container">
+                <div class="hero-content fade-in-up">
+                    <h1>Your Personal Voice Agent for Teams</h1>
+                    <p class="hero-subtitle">
+                        Connect your own Google, Slack, and calendar accounts securely. 
+                        CoreAssist gives each team member their own private AI assistant.
+                    </p>
+                    <div class="cta-buttons">
+                        <a href="#download" class="btn btn-primary">
+                            <span>⬇️</span> Download Now
+                        </a>
+                        <a href="#features" class="btn btn-secondary">
+                            <span>✨</span> Learn More
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="features" class="features">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Built for Modern Teams</h2>
+                    <p class="section-subtitle">
+                        Unlike shared bot accounts, CoreAssist lets each user connect their own services 
+                        for maximum security and personalization.
+                    </p>
+                </div>
+                
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🔐</div>
+                        <h3 class="feature-title">Personal Account Security</h3>
+                        <p class="feature-description">
+                            Each user connects their own Google, Slack, and calendar accounts. 
+                            No shared credentials or privacy concerns.
+                        </p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">🎤</div>
+                        <h3 class="feature-title">Voice-First Interface</h3>
+                        <p class="feature-description">
+                            Natural voice commands to manage tasks, schedule meetings, 
+                            and send messages across all your connected services.
+                        </p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">⚡</div>
+                        <h3 class="feature-title">Multi-Service Integration</h3>
+                        <p class="feature-description">
+                            Google Tasks, Google Calendar, and Slack integration with 
+                            plans for Microsoft 365, Notion, and more.
+                        </p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">🛡️</div>
+                        <h3 class="feature-title">Enterprise Security</h3>
+                        <p class="feature-description">
+                            OAuth2 authentication, encrypted credential storage, 
+                            and code-signed applications for maximum trust.
+                        </p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">🔄</div>
+                        <h3 class="feature-title">Real-Time Updates</h3>
+                        <p class="feature-description">
+                            Automatic updates keep your agent current with the latest 
+                            features and security improvements.
+                        </p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">🌐</div>
+                        <h3 class="feature-title">Cross-Platform</h3>
+                        <p class="feature-description">
+                            Native desktop applications for Windows, macOS, and Linux 
+                            with consistent experience across all platforms.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="download" class="download">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Download CoreAssist</h2>
+                    <p class="section-subtitle">
+                        Get started with your personal voice agent in minutes. 
+                        Choose your platform below.
+                    </p>
+                </div>
+                
+                <div class="download-cards">
+                    <div class="download-card">
+                        <div class="platform-icon">🪟</div>
+                        <h3 class="platform-name">Windows</h3>
+                        <p class="platform-details">
+                            Windows 10/11 • 64-bit<br>
+                            Installer (.exe) • ~150MB
+                        </p>
+                        <a href="#" class="btn btn-download" onclick="downloadFile('windows')">
+                            <span>⬇️</span> Download for Windows
+                        </a>
+                    </div>
+                    
+                    <div class="download-card">
+                        <div class="platform-icon">🍎</div>
+                        <h3 class="platform-name">macOS</h3>
+                        <p class="platform-details">
+                            macOS 10.15+ • Intel & Apple Silicon<br>
+                            DMG Image • ~140MB
+                        </p>
+                        <a href="#" class="btn btn-download" onclick="downloadFile('mac')">
+                            <span>⬇️</span> Download for Mac
+                        </a>
+                    </div>
+                    
+                    <div class="download-card">
+                        <div class="platform-icon">🐧</div>
+                        <h3 class="platform-name">Linux</h3>
+                        <p class="platform-details">
+                            Ubuntu 18.04+ • Most Distributions<br>
+                            AppImage • ~160MB
+                        </p>
+                        <a href="#" class="btn btn-download" onclick="downloadFile('linux')">
+                            <span>⬇️</span> Download for Linux
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="security" class="trust">
+            <div class="container">
+                <h2 class="section-title">Security You Can Trust</h2>
+                <div class="trust-badges">
+                    <div class="trust-badge">
+                        <span class="trust-icon">✅</span>
+                        <span>Code Signed Applications</span>
+                    </div>
+                    <div class="trust-badge">
+                        <span class="trust-icon">🔒</span>
+                        <span>OAuth2 Authentication</span>
+                    </div>
+                    <div class="trust-badge">
+                        <span class="trust-icon">🛡️</span>
+                        <span>Encrypted Data Storage</span>
+                    </div>
+                    <div class="trust-badge">
+                        <span class="trust-icon">🔄</span>
+                        <span>Automatic Security Updates</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>CoreAssist</h3>
+                    <p>The future of voice-powered productivity for teams.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Support</h3>
+                    <a href="#">Getting Started</a><br>
+                    <a href="#">Documentation</a><br>
+                    <a href="#">Contact</a>
+                </div>
+                <div class="footer-section">
+                    <h3>Security</h3>
+                    <a href="#">Privacy Policy</a><br>
+                    <a href="#">Terms of Service</a><br>
+                    <a href="#">Security</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 CoreAssist. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Platform detection and download handling
+        function detectPlatform() {
+            const userAgent = navigator.userAgent.toLowerCase();
+            if (userAgent.includes('win')) return 'windows';
+            if (userAgent.includes('mac')) return 'mac';
+            if (userAgent.includes('linux')) return 'linux';
+            return 'windows'; // Default
+        }
+
+        function downloadFile(platform) {
+            // In production, these would be actual download URLs
+            const downloadUrls = {
+                windows: 'https://github.com/yourorg/coreassist/releases/latest/download/CoreAssist-Setup.exe',
+                mac: 'https://github.com/yourorg/coreassist/releases/latest/download/CoreAssist.dmg',
+                linux: 'https://github.com/yourorg/coreassist/releases/latest/download/CoreAssist.AppImage'
+            };
+
+            // For now, show a helpful message
+            alert(`Download would start for ${platform.charAt(0).toUpperCase() + platform.slice(1)}.\n\nActual URL: ${downloadUrls[platform]}\n\nTo implement:\n1. Build your Electron app with electron-builder\n2. Upload releases to GitHub\n3. Update these URLs`);
+        }
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Header background on scroll
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 100) {
+                header.style.background = 'rgba(255, 255, 255, 0.98)';
+                header.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.1)';
+            } else {
+                header.style.background = 'rgba(255, 255, 255, 0.95)';
+                header.style.boxShadow = 'none';
+            }
+        });
+
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            const navLinks = document.getElementById('navLinks');
+            navLinks.classList.toggle('open');
+        }
+
+        // Auto-detect platform and highlight the appropriate download button
+        document.addEventListener('DOMContentLoaded', () => {
+            const platform = detectPlatform();
+            const cards = document.querySelectorAll('.download-card');
+            
+            cards.forEach(card => {
+                const platformName = card.querySelector('.platform-name').textContent.toLowerCase();
+                if (
+                    (platform === 'windows' && platformName === 'windows') ||
+                    (platform === 'mac' && platformName === 'macos') ||
+                    (platform === 'linux' && platformName === 'linux')
+                ) {
+                    card.style.borderColor = 'var(--primary-blue)';
+                    card.style.transform = 'translateY(-4px)';
+                    card.querySelector('.btn-download').innerHTML = 
+                        '<span>⬇️</span> Download Now (Recommended)';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
