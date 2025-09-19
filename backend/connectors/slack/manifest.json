@@ -1,0 +1,84 @@
+{
+  "info": {
+    "name": "Slack",
+    "description": "Connector for Slack API - send messages and manage channels",
+    "version": "1.0.0",
+    "auth_required": true,
+    "auth_type": "oauth2",
+    "oauth_scopes": ["chat:write", "channels:read", "users:read"]
+  },
+  "tools": [
+    {
+      "name": "send_message",
+      "description": "Send a message to a Slack channel or user",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "channel": {
+            "type": "string",
+            "description": "Channel ID or name (e.g., '#general' or 'C1234567890')"
+          },
+          "text": {
+            "type": "string",
+            "description": "The message text to send"
+          },
+          "thread_ts": {
+            "type": "string",
+            "description": "Thread timestamp to reply to a specific thread"
+          }
+        },
+        "required": ["channel", "text"]
+      }
+    },
+    {
+      "name": "list_channels",
+      "description": "List all channels in the workspace",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "exclude_archived": {
+            "type": "boolean",
+            "description": "Exclude archived channels (default: true)"
+          }
+        },
+        "required": []
+      }
+    },
+    {
+      "name": "get_user_info",
+      "description": "Get information about a user",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "string",
+            "description": "The user ID to get information about"
+          }
+        },
+        "required": ["user_id"]
+      }
+    },
+    {
+      "name": "set_status",
+      "description": "Set the user's Slack status",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "status_text": {
+            "type": "string",
+            "description": "The status text to display"
+          },
+          "status_emoji": {
+            "type": "string",
+            "description": "Emoji for the status (e.g., ':coffee:')"
+          },
+          "status_expiration": {
+            "type": "integer",
+            "description": "Unix timestamp when the status expires"
+          }
+        },
+        "required": ["status_text"]
+      }
+    }
+  ]
+}

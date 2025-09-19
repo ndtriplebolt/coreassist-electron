@@ -1,0 +1,80 @@
+{
+  "info": {
+    "name": "Google Calendar",
+    "description": "Connector for Google Calendar API - manage calendar events and meetings",
+    "version": "1.0.0",
+    "auth_required": true,
+    "auth_type": "oauth2",
+    "oauth_scopes": ["https://www.googleapis.com/auth/calendar"]
+  },
+  "tools": [
+    {
+      "name": "list_calendars",
+      "description": "Get all calendars for the authenticated user",
+      "parameters": {
+        "type": "object",
+        "properties": {},
+        "required": []
+      }
+    },
+    {
+      "name": "create_event",
+      "description": "Create a new calendar event",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "calendar_id": {
+            "type": "string",
+            "description": "The ID of the calendar to create the event in (default: 'primary')"
+          },
+          "title": {
+            "type": "string",
+            "description": "The title/summary of the event"
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the event"
+          },
+          "start_time": {
+            "type": "string",
+            "description": "Start time in ISO 8601 format (e.g., '2024-01-01T10:00:00-08:00')"
+          },
+          "end_time": {
+            "type": "string",
+            "description": "End time in ISO 8601 format (e.g., '2024-01-01T11:00:00-08:00')"
+          },
+          "attendees": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of attendee email addresses"
+          }
+        },
+        "required": ["title", "start_time", "end_time"]
+      }
+    },
+    {
+      "name": "list_events",
+      "description": "List upcoming events from a calendar",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "calendar_id": {
+            "type": "string",
+            "description": "The ID of the calendar to list events from (default: 'primary')"
+          },
+          "max_results": {
+            "type": "integer",
+            "description": "Maximum number of events to return (default: 10)"
+          },
+          "time_min": {
+            "type": "string",
+            "description": "Lower bound for event start time in ISO 8601 format"
+          }
+        },
+        "required": []
+      }
+    }
+  ]
+}

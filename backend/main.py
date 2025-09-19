@@ -10,7 +10,7 @@ All POST endpoints require X-Auth header with SHARED_SECRET.
 """
 
 import os
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Optional
 from fastapi import FastAPI, HTTPException, Depends, Header
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
@@ -40,13 +40,13 @@ app.add_middleware(
 class ToolCallRequest(BaseModel):
     tool_name: str = Field(..., description="Name of the tool to execute (supports namespaced names like 'slack.send_message')")
     parameters: Dict[str, Any] = Field(default_factory=dict, description="Tool-specific parameters")
-    user_id: str = Field(None, description="User ID for authentication context (optional)")
+    user_id: Optional[str] = Field(None, description="User ID for authentication context (optional)")
 
 
 class ToolCallResponse(BaseModel):
     success: bool
     result: Dict[str, Any] = Field(default_factory=dict)
-    error: str = None
+    error: Optional[str] = None
 
 
 class HealthResponse(BaseModel):

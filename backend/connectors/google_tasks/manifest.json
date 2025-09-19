@@ -1,0 +1,93 @@
+{
+  "info": {
+    "name": "Google Tasks",
+    "description": "Connector for Google Tasks API - manage task lists and tasks",
+    "version": "1.0.0",
+    "auth_required": true,
+    "auth_type": "oauth2",
+    "oauth_scopes": ["https://www.googleapis.com/auth/tasks"]
+  },
+  "tools": [
+    {
+      "name": "list_task_lists",
+      "description": "Get all task lists for the authenticated user",
+      "parameters": {
+        "type": "object",
+        "properties": {},
+        "required": []
+      }
+    },
+    {
+      "name": "create_task_list",
+      "description": "Create a new task list",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "The title of the task list"
+          }
+        },
+        "required": ["title"]
+      }
+    },
+    {
+      "name": "list_tasks",
+      "description": "Get all tasks in a specific task list",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "tasklist_id": {
+            "type": "string",
+            "description": "The ID of the task list to get tasks from"
+          }
+        },
+        "required": ["tasklist_id"]
+      }
+    },
+    {
+      "name": "create_task",
+      "description": "Create a new task in a task list",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "tasklist_id": {
+            "type": "string",
+            "description": "The ID of the task list to add the task to"
+          },
+          "title": {
+            "type": "string",
+            "description": "The title of the task"
+          },
+          "notes": {
+            "type": "string",
+            "description": "Additional notes for the task"
+          },
+          "due_date": {
+            "type": "string",
+            "description": "Due date in ISO 8601 format (YYYY-MM-DD)"
+          }
+        },
+        "required": ["tasklist_id", "title"]
+      }
+    },
+    {
+      "name": "complete_task",
+      "description": "Mark a task as completed",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "tasklist_id": {
+            "type": "string",
+            "description": "The ID of the task list containing the task"
+          },
+          "task_id": {
+            "type": "string",
+            "description": "The ID of the task to complete"
+          }
+        },
+        "required": ["tasklist_id", "task_id"]
+      }
+    }
+  ]
+}
